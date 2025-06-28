@@ -33,6 +33,13 @@ from the original authenticator provider [documentation](https://www.keycloak.or
    1. `Receiver Phone Number Attribute`: The attribute that contains the receiver phone number. For many APIs (i.e. GTX Messaging, SMS Eagle) this is `to`.
    1. `Sender Phone Number Attribute`: The attribute that contains the sender phone number. Leave empty if not required.
    1. `SenderId`: The sender ID is displayed as the message sender on the receiving device. This is the value for the `Sender Phone Number Attribute`.
+   1. `SMS Provider`: Select which provider to use (`generic`, `twilio`, `nexmo`). Choosing a provider reveals additional inputs for that provider.
+   1. `Twilio Account SID`: Required when using the `twilio` provider.
+   1. `Twilio Auth Token`: Required when using the `twilio` provider.
+   1. `Twilio From`: Sender number registered with Twilio.
+   1. `Nexmo API Key`: Required when using the `nexmo` provider.
+   1. `Nexmo API Secret`: Required when using the `nexmo` provider.
+   1. `Nexmo From`: Sender name or number for Nexmo.
 1. Go to `/admin/master/console/#/realm/authentication/required-actions` and enable required actions "Phone Validation" and "Update Mobile Number"
 
 # Usage
