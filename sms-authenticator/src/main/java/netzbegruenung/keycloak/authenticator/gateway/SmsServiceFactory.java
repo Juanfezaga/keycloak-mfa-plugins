@@ -29,12 +29,17 @@ public class SmsServiceFactory {
 
 	private static final Logger logger = Logger.getLogger(SmsServiceFactory.class);
 
-	public static SmsService get(Map<String, String> config) {
-		if (Boolean.parseBoolean(config.getOrDefault("simulation", "false"))) {
-			return (phoneNumber, message) ->
-				logger.infof("***** SIMULATION MODE ***** Would send SMS to %s with text: %s", phoneNumber, message);
-		} else {
-			return new ApiSmsService(config);
-		}
-	}
+        public static SmsService get(Map<String, String> config) {
+                if (Boolean.parseBoolean(config.getOrDefault("simulation", "false"))) {
+                        return (phoneNumber, message) ->
+                                logger.infof("***** SIMULATION MODE ***** Would send SMS to %s with text: %s", phoneNumber, message);
+                }
+
+                String provider = config.getOrDefault("provider", "generic");
+                return switch (provider) {
+                        case "twilio" -> new TwilioSmsService(config);
+                        case "nexmo" -> new NexmoSmsService(config);
+                        default -> new ApiSmsService(config);
+                };
+        }
 }

@@ -70,9 +70,18 @@ public class SmsAuthenticatorFactory implements AuthenticatorFactory {
 	}
 
 	@Override
-	public List<ProviderConfigProperty> getConfigProperties() {
-		return List.of(
-			new ProviderConfigProperty("length", "Code length", "The number of digits of the generated code.", ProviderConfigProperty.STRING_TYPE, 6),
+        public List<ProviderConfigProperty> getConfigProperties() {
+                ProviderConfigProperty provider = new ProviderConfigProperty();
+                provider.setName("provider");
+                provider.setLabel("SMS Provider");
+                provider.setHelpText("Select the SMS provider implementation.");
+                provider.setType(ProviderConfigProperty.LIST_TYPE);
+                provider.setDefaultValue("generic");
+                provider.setOptions(List.of("generic", "twilio", "nexmo"));
+
+                return List.of(
+                        provider,
+                        new ProviderConfigProperty("length", "Code length", "The number of digits of the generated code.", ProviderConfigProperty.STRING_TYPE, 6),
 			new ProviderConfigProperty("ttl", "Time-to-live", "The time to live in seconds for the code to be valid.", ProviderConfigProperty.STRING_TYPE, "300"),
 			new ProviderConfigProperty("senderId", "SenderId", "The sender ID is displayed as the message sender on the receiving device.", ProviderConfigProperty.STRING_TYPE, "Keycloak"),
 			new ProviderConfigProperty("simulation", "Simulation mode", "In simulation mode, the SMS won't be sent, but printed to the server logs", ProviderConfigProperty.BOOLEAN_TYPE, true),
@@ -85,8 +94,14 @@ public class SmsAuthenticatorFactory implements AuthenticatorFactory {
 			new ProviderConfigProperty("messageattribute", "Message Attribute", "The attribute that contains the SMS message text.", ProviderConfigProperty.STRING_TYPE, "text"),
 			new ProviderConfigProperty("receiverattribute", "Receiver Phone Number Attribute", "The attribute that contains the receiver phone number.", ProviderConfigProperty.STRING_TYPE, "to"),
 			new ProviderConfigProperty("receiverJsonTemplate", "Receiver Phone Number Json value template", "Receiver value structure can be customised to match API requirements.", ProviderConfigProperty.STRING_TYPE, "\"%s\""),
-			new ProviderConfigProperty("senderattribute", "Sender Phone Number Attribute", "The attribute that contains the sender phone number. Leave empty if not required.", ProviderConfigProperty.STRING_TYPE, "from"),
-			new ProviderConfigProperty("forceSecondFactor", "Force 2FA", "If 2FA authentication is not configured, the user is forced to setup SMS Authentication.", ProviderConfigProperty.BOOLEAN_TYPE, false),
+                        new ProviderConfigProperty("senderattribute", "Sender Phone Number Attribute", "The attribute that contains the sender phone number. Leave empty if not required.", ProviderConfigProperty.STRING_TYPE, "from"),
+                        new ProviderConfigProperty("twilioAccountSid", "Twilio Account SID", "Account SID for Twilio API (required for Twilio provider).", ProviderConfigProperty.STRING_TYPE, ""),
+                        new ProviderConfigProperty("twilioAuthToken", "Twilio Auth Token", "Auth token for Twilio API (required for Twilio provider).", ProviderConfigProperty.PASSWORD, ""),
+                        new ProviderConfigProperty("twilioFrom", "Twilio From", "Sender phone number registered with Twilio.", ProviderConfigProperty.STRING_TYPE, ""),
+                        new ProviderConfigProperty("nexmoApiKey", "Nexmo API Key", "API key for Nexmo/Vonage SMS (required for Nexmo provider).", ProviderConfigProperty.STRING_TYPE, ""),
+                        new ProviderConfigProperty("nexmoApiSecret", "Nexmo API Secret", "API secret for Nexmo/Vonage SMS (required for Nexmo provider).", ProviderConfigProperty.PASSWORD, ""),
+                        new ProviderConfigProperty("nexmoFrom", "Nexmo From", "Sender name or number for Nexmo.", ProviderConfigProperty.STRING_TYPE, ""),
+                        new ProviderConfigProperty("forceSecondFactor", "Force 2FA", "If 2FA authentication is not configured, the user is forced to setup SMS Authentication.", ProviderConfigProperty.BOOLEAN_TYPE, false),
 			new ProviderConfigProperty("whitelist", "Excluded from enforced 2FA", "All users with the here selected role are not forced to setup 2FA.", ProviderConfigProperty.ROLE_TYPE, null),
 			new ProviderConfigProperty("hideResponsePayload", "Redacted API response log message", "Don't log API response body of SMS send request.", ProviderConfigProperty.BOOLEAN_TYPE, false),
 			new ProviderConfigProperty("mobileInputFieldPlaceholder", "Phone number input field placeholder", "The placeholder string user in the phone number input field", ProviderConfigProperty.STRING_TYPE, ""),
